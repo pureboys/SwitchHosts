@@ -156,6 +156,12 @@ const onActive = async () => {
 
 global.tracer = new Tracer()
 
+// 修复 Linux 下 GPU 进程启动失败的问题
+if (process.platform === 'linux') {
+  app.commandLine.appendSwitch('disable-gpu-sandbox')
+  app.commandLine.appendSwitch('enable-features', 'VaapiVideoDecoder')
+}
+
 app.on('ready', async () => {
   console.log(`VERSION: ${version.join('.')}`)
   global.session_id = uuid4()

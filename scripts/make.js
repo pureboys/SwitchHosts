@@ -83,7 +83,8 @@ const doMake = async () => {
   const { MAKE_FOR } = process.env
   let targets = TARGET_PLATFORMS_configs.all
 
-  cfg_common.compression = 'maximum'
+  // 使用 normal 压缩以提高启动速度，maximum 压缩会导致解压时间过长
+  cfg_common.compression = 'normal'
 
   if (MAKE_FOR === 'dev') {
     targets = TARGET_PLATFORMS_configs.mac
@@ -94,6 +95,8 @@ const doMake = async () => {
     targets = TARGET_PLATFORMS_configs.win
   } else if (MAKE_FOR === 'linux') {
     targets = TARGET_PLATFORMS_configs.linux
+    // Linux 使用 store 压缩以获得最快的启动速度
+    cfg_common.compression = 'store'
   }
 
   await builder.build({
